@@ -1,18 +1,50 @@
 {
-  "name": { "en": "Firewall health", "nl": "Firewall-gezondheid" },
+  "name": {
+    "en": "Firewall health",
+    "nl": "Firewall-gezondheid"
+  },
   "height": 640,
   "transparent": false,
   "settings": [
-    { "id": "show_charts", "type": "checkbox", "title": { "en": "Show 24-hour latency and throughput", "nl": "Toon latency en doorvoer (24 uur)" }, "value": true },
-    { "id": "show_services", "type": "checkbox", "title": { "en": "Show services", "nl": "Toon services" }, "value": true },
-    { "id": "show_events", "type": "checkbox", "title": { "en": "Show recent events", "nl": "Toon recente gebeurtenissen" }, "value": true }
+    {
+      "id": "show_charts",
+      "type": "checkbox",
+      "title": {
+        "en": "Show 24-hour latency and throughput",
+        "nl": "Toon latency en doorvoer (24 uur)"
+      },
+      "value": true
+    },
+    {
+      "id": "show_services",
+      "type": "checkbox",
+      "title": {
+        "en": "Show services",
+        "nl": "Toon services"
+      },
+      "value": true
+    },
+    {
+      "id": "show_events",
+      "type": "checkbox",
+      "title": {
+        "en": "Show recent events",
+        "nl": "Toon recente gebeurtenissen"
+      },
+      "value": true
+    }
   ],
   "devices": {
     "type": "app",
     "singular": true,
-    "filter": { "driver_id": "firewall" }
+    "filter": {
+      "class": "sensor"
+    }
   },
   "api": {
-    "getData": { "method": "GET", "path": "/" }
+    "getData": {
+      "method": "GET",
+      "path": "/"
+    }
   }
 }

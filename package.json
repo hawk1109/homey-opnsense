@@ -1,6 +1,6 @@
 {
   "name": "nl.hawk-it.opnsense",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Homey app for OPNsense firewalls: health, WAN quality, services and a dashboard widget",
   "main": "app.js",
   "license": "MIT",

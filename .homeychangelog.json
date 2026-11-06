@@ -2,5 +2,9 @@
   "1.0.0": {
     "en": "First release: firewall health, WAN latency, loss and throughput, services, flows and a dashboard widget.",
     "nl": "Eerste versie: firewallgezondheid, WAN-latency, -verlies en -doorvoer, services, flows en een dashboardwidget."
+  },
+  "1.0.1": {
+    "en": "Fix: the firewall can now be selected in the dashboard widget.",
+    "nl": "Fix: de firewall is nu te kiezen in de dashboardwidget."
   }
 }

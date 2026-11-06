@@ -1,19 +1,46 @@
 {
   "id": "nl.hawk-it.opnsense",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=12.3.0",
   "sdk": 3,
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "brandColor": "#D94F00",
-  "name": { "en": "OPNsense", "nl": "OPNsense" },
+  "name": {
+    "en": "OPNsense",
+    "nl": "OPNsense"
+  },
   "description": {
     "en": "Your firewall's health at a glance",
     "nl": "De gezondheid van je firewall in één oogopslag"
   },
-  "category": ["security"],
+  "category": [
+    "security"
+  ],
   "tags": {
-    "en": ["opnsense", "firewall", "router", "gateway", "network", "monitoring", "internet", "wan", "latency"],
-    "nl": ["opnsense", "firewall", "router", "gateway", "netwerk", "monitoring", "internet", "wan", "latency"]
+    "en": [
+      "opnsense",
+      "firewall",
+      "router",
+      "gateway",
+      "network",
+      "monitoring",
+      "internet",
+      "wan",
+      "latency"
+    ],
+    "nl": [
+      "opnsense",
+      "firewall",
+      "router",
+      "gateway",
+      "netwerk",
+      "monitoring",
+      "internet",
+      "wan",
+      "latency"
+    ]
   },
   "permissions": [],
   "images": {
@@ -21,12 +48,22 @@
     "large": "/assets/images/large.png",
     "xlarge": "/assets/images/xlarge.png"
   },
-  "author": { "name": "Andre van Wijk", "email": "andre.van.wijk@hawk-it.nl" },
+  "author": {
+    "name": "Andre van Wijk",
+    "email": "andre.van.wijk@hawk-it.nl"
+  },
   "homepage": "https://hawk-it.nl",
   "support": "mailto:andre.van.wijk@hawk-it.nl",
   "source": "https://github.com/hawk1109/homey-opnsense",
-  "bugs": { "url": "https://github.com/hawk1109/homey-opnsense/issues" },
+  "bugs": {
+    "url": "https://github.com/hawk1109/homey-opnsense/issues"
+  },
   "contributors": {
-    "developers": [{ "name": "Andre van Wijk", "email": "andre.van.wijk@hawk-it.nl" }]
+    "developers": [
+      {
+        "name": "Andre van Wijk",
+        "email": "andre.van.wijk@hawk-it.nl"
+      }
+    ]
   }
 }
