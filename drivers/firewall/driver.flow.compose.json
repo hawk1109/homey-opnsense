@@ -1,0 +1,299 @@
+{
+  "triggers": [
+    {
+      "id": "problem_started",
+      "title": {
+        "en": "A problem started",
+        "nl": "Er ontstond een probleem"
+      },
+      "tokens": [
+        {
+          "name": "problem",
+          "type": "string",
+          "title": {
+            "en": "Problem",
+            "nl": "Probleem"
+          },
+          "example": {
+            "en": "IGMP Proxy stopped",
+            "nl": "IGMP Proxy gestopt"
+          }
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "title": {
+            "en": "Code",
+            "nl": "Code"
+          },
+          "example": {
+            "en": "service:igmpproxy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "problem_cleared",
+      "title": {
+        "en": "A problem was resolved",
+        "nl": "Een probleem is opgelost"
+      },
+      "tokens": [
+        {
+          "name": "problem",
+          "type": "string",
+          "title": {
+            "en": "Problem",
+            "nl": "Probleem"
+          },
+          "example": {
+            "en": "IGMP Proxy stopped",
+            "nl": "IGMP Proxy gestopt"
+          }
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "title": {
+            "en": "Code",
+            "nl": "Code"
+          },
+          "example": {
+            "en": "service:igmpproxy"
+          }
+        },
+        {
+          "name": "minutes",
+          "type": "number",
+          "title": {
+            "en": "Duration (minutes)",
+            "nl": "Duur (minuten)"
+          },
+          "example": 4
+        }
+      ]
+    },
+    {
+      "id": "wan_down",
+      "title": {
+        "en": "Internet went down",
+        "nl": "Internet viel weg"
+      },
+      "tokens": [
+        {
+          "name": "gateway",
+          "type": "string",
+          "title": {
+            "en": "Gateway",
+            "nl": "Gateway"
+          },
+          "example": {
+            "en": "WAN_PPPOE"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wan_up",
+      "title": {
+        "en": "Internet came back",
+        "nl": "Internet is terug"
+      },
+      "tokens": [
+        {
+          "name": "gateway",
+          "type": "string",
+          "title": {
+            "en": "Gateway",
+            "nl": "Gateway"
+          },
+          "example": {
+            "en": "WAN_PPPOE"
+          }
+        },
+        {
+          "name": "minutes",
+          "type": "number",
+          "title": {
+            "en": "Down for (minutes)",
+            "nl": "Weg geweest (minuten)"
+          },
+          "example": 3
+        }
+      ]
+    },
+    {
+      "id": "service_stopped",
+      "title": {
+        "en": "A service stopped",
+        "nl": "Een service is gestopt"
+      },
+      "tokens": [
+        {
+          "name": "service",
+          "type": "string",
+          "title": {
+            "en": "Service",
+            "nl": "Service"
+          },
+          "example": {
+            "en": "IGMP Proxy"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "title": {
+            "en": "Service id",
+            "nl": "Service-id"
+          },
+          "example": {
+            "en": "igmpproxy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "service_started",
+      "title": {
+        "en": "A service started again",
+        "nl": "Een service draait weer"
+      },
+      "tokens": [
+        {
+          "name": "service",
+          "type": "string",
+          "title": {
+            "en": "Service",
+            "nl": "Service"
+          },
+          "example": {
+            "en": "IGMP Proxy"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "title": {
+            "en": "Service id",
+            "nl": "Service-id"
+          },
+          "example": {
+            "en": "igmpproxy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unreachable",
+      "title": {
+        "en": "Firewall became unreachable",
+        "nl": "Firewall werd onbereikbaar"
+      }
+    },
+    {
+      "id": "reachable",
+      "title": {
+        "en": "Firewall is reachable again",
+        "nl": "Firewall is weer bereikbaar"
+      },
+      "tokens": [
+        {
+          "name": "minutes",
+          "type": "number",
+          "title": {
+            "en": "Unreachable for (minutes)",
+            "nl": "Onbereikbaar geweest (minuten)"
+          },
+          "example": 5
+        }
+      ]
+    },
+    {
+      "id": "rebooted",
+      "title": {
+        "en": "Firewall rebooted",
+        "nl": "Firewall is herstart"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "id": "is_healthy",
+      "title": {
+        "en": "Is !{{healthy|not healthy}}",
+        "nl": "Is !{{gezond|niet gezond}}"
+      }
+    },
+    {
+      "id": "wan_online",
+      "title": {
+        "en": "Internet is !{{up|down}}",
+        "nl": "Internet is !{{in de lucht|weg}}"
+      }
+    },
+    {
+      "id": "service_running",
+      "title": {
+        "en": "Service !{{is|is not}} running",
+        "nl": "Service !{{draait|draait niet}}"
+      },
+      "titleFormatted": {
+        "en": "[[service]] !{{is|is not}} running",
+        "nl": "[[service]] !{{draait|draait niet}}"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "service",
+          "title": {
+            "en": "Service",
+            "nl": "Service"
+          },
+          "placeholder": {
+            "en": "IGMP Proxy",
+            "nl": "IGMP Proxy"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "restart_service",
+      "title": {
+        "en": "Restart a service",
+        "nl": "Herstart een service"
+      },
+      "titleFormatted": {
+        "en": "Restart [[service]]",
+        "nl": "Herstart [[service]]"
+      },
+      "hint": {
+        "en": "Needs the 'Status: Services' privilege on the API user.",
+        "nl": "Vereist het recht 'Status: Services' op de API-gebruiker."
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "service",
+          "title": {
+            "en": "Service",
+            "nl": "Service"
+          },
+          "placeholder": {
+            "en": "IGMP Proxy",
+            "nl": "IGMP Proxy"
+          }
+        }
+      ]
+    },
+    {
+      "id": "refresh",
+      "title": {
+        "en": "Refresh now",
+        "nl": "Nu verversen"
+      }
+    }
+  ]
+}

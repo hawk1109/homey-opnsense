@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Firewall states",
+    "nl": "Firewall-states"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/capabilities/states.svg"
+}

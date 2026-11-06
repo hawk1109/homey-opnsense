@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "CPU load",
+    "nl": "CPU-belasting"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 2,
+  "insights": true,
+  "icon": "/assets/capabilities/cpu.svg"
+}

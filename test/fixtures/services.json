@@ -1,0 +1,133 @@
+{
+ "total": 18,
+ "rowCount": 18,
+ "current": 1,
+ "rows": [
+  {
+   "id": "configd",
+   "locked": 1,
+   "running": 1,
+   "description": "Configd",
+   "name": "configd"
+  },
+  {
+   "id": "cron",
+   "locked": 0,
+   "running": 1,
+   "description": "Cron",
+   "name": "cron"
+  },
+  {
+   "id": "dnsmasq",
+   "locked": 0,
+   "running": 1,
+   "description": "Dnsmasq DNS/DHCP",
+   "name": "dnsmasq"
+  },
+  {
+   "id": "dpinger/:watcher:",
+   "locked": 1,
+   "running": 1,
+   "description": "Gateway Watcher",
+   "name": "dpinger"
+  },
+  {
+   "id": "dpinger/WAN_PPPOE",
+   "locked": 0,
+   "running": 1,
+   "description": "Gateway WAN_PPPOE",
+   "name": "dpinger"
+  },
+  {
+   "id": "hostwatch",
+   "locked": 0,
+   "running": 1,
+   "description": "Hostwatch",
+   "name": "hostwatch"
+  },
+  {
+   "id": "igmpproxy",
+   "locked": 0,
+   "running": 1,
+   "description": "IGMP Proxy",
+   "name": "igmpproxy"
+  },
+  {
+   "id": "login",
+   "locked": 1,
+   "running": 1,
+   "description": "Users and Groups",
+   "name": "login"
+  },
+  {
+   "id": "monit",
+   "locked": 0,
+   "running": 1,
+   "description": "Monit System Monitoring",
+   "name": "monit"
+  },
+  {
+   "id": "ntpd",
+   "locked": 0,
+   "running": 1,
+   "description": "Ntpd",
+   "name": "ntpd"
+  },
+  {
+   "id": "openssh",
+   "locked": 0,
+   "running": 1,
+   "description": "Secure Shell",
+   "name": "openssh"
+  },
+  {
+   "id": "pf",
+   "locked": 1,
+   "running": 1,
+   "description": "Packet Filter",
+   "name": "pf"
+  },
+  {
+   "id": "routing",
+   "locked": 1,
+   "running": 1,
+   "description": "System routing",
+   "name": "routing"
+  },
+  {
+   "id": "sysctl",
+   "locked": 1,
+   "running": 1,
+   "description": "System tunables",
+   "name": "sysctl"
+  },
+  {
+   "id": "syslog-ng",
+   "locked": 0,
+   "running": 1,
+   "description": "Syslog-ng",
+   "name": "syslog-ng"
+  },
+  {
+   "id": "tailscale",
+   "locked": 0,
+   "running": 1,
+   "description": "Tailscale",
+   "name": "tailscale"
+  },
+  {
+   "id": "unbound",
+   "locked": 0,
+   "running": 1,
+   "description": "Unbound",
+   "name": "unbound"
+  },
+  {
+   "id": "webgui",
+   "locked": 1,
+   "running": 1,
+   "description": "Web GUI",
+   "name": "webgui"
+  }
+ ]
+}

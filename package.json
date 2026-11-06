@@ -1,0 +1,15 @@
+{
+  "name": "nl.hawk-it.opnsense",
+  "version": "1.0.0",
+  "description": "Homey app for OPNsense firewalls: health, WAN quality, services and a dashboard widget",
+  "main": "app.js",
+  "license": "MIT",
+  "author": "Andre van Wijk <andre.van.wijk@hawk-it.nl>",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test --test-timeout=10000 test/*.test.js",
+    "validate": "homey app validate --level publish"
+  }
+}

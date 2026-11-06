@@ -1,0 +1,162 @@
+<style>
+  .op-wrap { display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+  .op-hero { display: flex; align-items: center; gap: 14px; }
+  .op-hero svg { flex: 0 0 56px; width: 56px; height: 56px; }
+  .op-hero h1 { margin: 0; font-size: 20px; line-height: 1.25; font-weight: 600; }
+  .op-intro, .op-hint { margin: 0; color: var(--homey-color-text-light, #6b7280); font-size: 14px; line-height: 1.45; }
+  .op-hint { font-size: 12px; }
+  .op-box {
+    display: none; padding: 12px 14px; border-radius: 12px; font-size: 13px; line-height: 1.45;
+    border: 1.5px solid var(--homey-color-border, #e5e7eb);
+  }
+  .op-box.show { display: block; }
+  .op-box dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 8px 0 0; }
+  .op-box dt { color: var(--homey-color-text-light, #6b7280); }
+  .op-box dd { margin: 0; word-break: break-all; }
+  .op-fp { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; line-height: 1.5; }
+  .op-error { background: rgba(220, 38, 38, .08); color: #B91C1C; border-color: transparent; }
+  .op-ok { background: rgba(12, 163, 12, .08); border-color: transparent; }
+  .op-warn { margin-top: 6px; color: #92400E; }
+  .op-pw { position: relative; }
+  .op-pw button {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    border: 0; background: none; padding: 6px; cursor: pointer; color: var(--homey-color-text-light, #6b7280);
+  }
+</style>
+
+<div class="op-wrap">
+  <div class="op-hero">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="opg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F26A1B"/><stop offset="1" stop-color="#B83A00"/></linearGradient></defs>
+      <rect width="64" height="64" rx="16" fill="url(#opg)"/>
+      <path d="M32 13 47 19v11c0 10-6.4 17.6-15 21-8.6-3.4-15-11-15-21V19z" fill="none" stroke="#fff" stroke-width="3.2" stroke-linejoin="round"/>
+      <path d="M24.5 32.5 30 38l10-11" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1 data-i18n="pair.title"></h1>
+  </div>
+
+  <p class="op-intro" data-i18n="pair.intro"></p>
+
+  <form class="homey-form" id="op-form" autocomplete="off" onsubmit="return false">
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="url" data-i18n="pair.url"></label>
+      <input class="homey-form-input" id="url" type="url" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://192.168.178.1">
+    </div>
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="key" data-i18n="pair.key"></label>
+      <input class="homey-form-input" id="key" type="text" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="secret" data-i18n="pair.secret"></label>
+      <div class="op-pw">
+        <input class="homey-form-input" id="secret" type="password" autocomplete="off">
+        <button type="button" id="toggle" aria-label="Show secret">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="op-box" id="cert" role="status">
+      <b data-i18n="pair.cert_title"></b>
+      <div id="cert-note"></div>
+      <dl>
+        <dt data-i18n="pair.cert_subject"></dt><dd id="c-subject"></dd>
+        <dt data-i18n="pair.cert_issuer"></dt><dd id="c-issuer"></dd>
+        <dt data-i18n="pair.cert_valid"></dt><dd id="c-valid"></dd>
+        <dt data-i18n="pair.cert_fp"></dt><dd class="op-fp" id="c-fp"></dd>
+      </dl>
+    </div>
+
+    <div class="op-box op-ok" id="done" role="status"><div id="done-text"></div><div class="op-warn" id="done-warn"></div></div>
+    <div class="op-box op-error" id="error" role="alert"></div>
+
+    <button class="homey-button-primary-full" id="go" type="submit" data-i18n="pair.check"></button>
+  </form>
+
+  <p class="op-hint" data-i18n="pair.privileges_hint"></p>
+</div>
+
+<script type="application/javascript">
+  (function () {
+    // Set to true in the repair copy of this view.
+    var IS_REPAIR = false;
+
+    var $ = function (id) { return document.getElementById(id); };
+    var btn = $('go');
+    var step = 'probe'; // probe -> connect -> done
+    var cert = null;
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      el.textContent = Homey.__(el.getAttribute('data-i18n'));
+    });
+    $('toggle').addEventListener('click', function () {
+      $('secret').type = $('secret').type === 'password' ? 'text' : 'password';
+    });
+
+    if (IS_REPAIR) {
+      Homey.emit('current').then(function (c) { if (c && c.url) $('url').value = c.url; }).catch(function () {});
+    }
+
+    // Editing the address invalidates the checked certificate.
+    $('url').addEventListener('input', function () {
+      if (step !== 'probe') { step = 'probe'; cert = null; $('cert').classList.remove('show'); label('pair.check'); }
+    });
+
+    function label(key) { btn.textContent = Homey.__(key); }
+    function busy(on, key) {
+      btn.disabled = on;
+      btn.classList.toggle('is-loading', on);
+      if (key) label(key);
+    }
+    function showError(e) {
+      $('error').textContent = e && e.message ? e.message : String(e);
+      $('error').classList.add('show');
+    }
+    function values() {
+      var url = $('url').value.trim();
+      if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+      return { url: url, key: $('key').value.trim(), secret: $('secret').value.trim() };
+    }
+
+    btn.addEventListener('click', function () {
+      $('error').classList.remove('show');
+      var v = values();
+
+      if (step === 'done') {
+        if (IS_REPAIR) Homey.done(); else Homey.nextView();
+        return;
+      }
+      if (!v.url || !v.key || !v.secret) { showError(Homey.__('pair.error_required')); return; }
+
+      if (step === 'probe') {
+        busy(true, 'pair.checking');
+        Homey.emit('probe', { url: v.url }).then(function (c) {
+          cert = c;
+          $('c-subject').textContent = c.subject || '—';
+          $('c-issuer').textContent = c.issuer || '—';
+          $('c-valid').textContent = c.validTo || '—';
+          $('c-fp').textContent = c.fingerprint;
+          $('cert-note').textContent = Homey.__(c.trusted ? 'pair.cert_trusted' : 'pair.cert_untrusted');
+          $('cert').classList.add('show');
+          step = 'connect';
+          busy(false, c.trusted ? 'pair.connect' : 'pair.trust');
+        }).catch(function (e) { showError(e); busy(false, 'pair.check'); });
+        return;
+      }
+
+      // step === 'connect': trusted certificates use normal CA verification, others are pinned.
+      busy(true, 'pair.connecting');
+      Homey.emit('connect', {
+        url: v.url, key: v.key, secret: v.secret, fingerprint: cert && !cert.trusted ? cert.fingerprint : '',
+      }).then(function (r) {
+        $('done-text').textContent = Homey.__('pair.connected', { hostname: r.hostname, version: r.version || '?' });
+        $('done-warn').textContent = r.missing && r.missing.length ? Homey.__('pair.missing', { list: r.missing.join(', ') }) : '';
+        $('done').classList.add('show');
+        step = 'done';
+        busy(false, 'pair.continue');
+      }).catch(function (e) { showError(e); busy(false, cert && !cert.trusted ? 'pair.trust' : 'pair.connect'); });
+    });
+
+    Homey.ready();
+  })();
+</script>

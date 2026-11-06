@@ -1,0 +1,15 @@
+{
+ "items": [
+  {
+   "name": "WAN_PPPOE",
+   "address": "195.190.228.110",
+   "status": "none",
+   "loss": "0.0 %",
+   "delay": "1.8 ms",
+   "stddev": "0.1 ms",
+   "monitor": "1.1.1.1",
+   "status_translated": "Online"
+  }
+ ],
+ "status": "ok"
+}

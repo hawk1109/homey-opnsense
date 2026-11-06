@@ -1,0 +1,6 @@
+{
+  "1.0.0": {
+    "en": "First release: firewall health, WAN latency, loss and throughput, services, flows and a dashboard widget.",
+    "nl": "Eerste versie: firewallgezondheid, WAN-latency, -verlies en -doorvoer, services, flows en een dashboardwidget."
+  }
+}

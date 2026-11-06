@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Disk",
+    "nl": "Schijf"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 0,
+  "insights": true,
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/disk.svg",
+  "min": 0,
+  "max": 100
+}

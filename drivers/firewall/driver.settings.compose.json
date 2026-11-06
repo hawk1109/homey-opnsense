@@ -1,0 +1,251 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Monitoring",
+      "nl": "Monitoring"
+    },
+    "children": [
+      {
+        "id": "poll_interval",
+        "type": "number",
+        "value": 60,
+        "min": 30,
+        "max": 900,
+        "label": {
+          "en": "Update interval",
+          "nl": "Verversingsinterval"
+        },
+        "units": {
+          "en": "s"
+        }
+      },
+      {
+        "id": "gateway_name",
+        "type": "text",
+        "value": "",
+        "label": {
+          "en": "Gateway",
+          "nl": "Gateway"
+        },
+        "hint": {
+          "en": "Gateway name as shown under System → Gateways, e.g. WAN_PPPOE. Leave empty to use the first monitored gateway.",
+          "nl": "Naam van de gateway zoals onder System → Gateways, bijv. WAN_PPPOE. Leeg laten voor de eerste gemonitorde gateway."
+        }
+      },
+      {
+        "id": "wan_interface",
+        "type": "text",
+        "value": "WAN",
+        "label": {
+          "en": "WAN interface for throughput",
+          "nl": "WAN-interface voor doorvoer"
+        },
+        "hint": {
+          "en": "Interface description (WAN) or device name (pppoe0) used for download/upload speed.",
+          "nl": "Interfacebeschrijving (WAN) of apparaatnaam (pppoe0) voor de download-/uploadsnelheid."
+        }
+      },
+      {
+        "id": "ignore_services",
+        "type": "text",
+        "value": "",
+        "label": {
+          "en": "Ignore services",
+          "nl": "Services negeren"
+        },
+        "hint": {
+          "en": "Comma-separated ids, names or descriptions; * is a wildcard. Example: openssh, dpinger*",
+          "nl": "Komma-gescheiden ids, namen of beschrijvingen; * is een wildcard. Voorbeeld: openssh, dpinger*"
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Thresholds",
+      "nl": "Drempels"
+    },
+    "children": [
+      {
+        "id": "th_latency",
+        "type": "number",
+        "value": 50,
+        "min": 1,
+        "max": 2000,
+        "label": {
+          "en": "WAN latency",
+          "nl": "WAN-latency"
+        },
+        "units": {
+          "en": "ms"
+        }
+      },
+      {
+        "id": "th_loss",
+        "type": "number",
+        "value": 5,
+        "min": 1,
+        "max": 100,
+        "label": {
+          "en": "WAN packet loss",
+          "nl": "WAN-pakketverlies"
+        },
+        "units": {
+          "en": "%"
+        }
+      },
+      {
+        "id": "th_temperature",
+        "type": "number",
+        "value": 75,
+        "min": 30,
+        "max": 110,
+        "label": {
+          "en": "Temperature",
+          "nl": "Temperatuur"
+        },
+        "units": {
+          "en": "°C"
+        }
+      },
+      {
+        "id": "th_memory",
+        "type": "number",
+        "value": 90,
+        "min": 10,
+        "max": 100,
+        "label": {
+          "en": "Memory",
+          "nl": "Geheugen"
+        },
+        "units": {
+          "en": "%"
+        }
+      },
+      {
+        "id": "th_disk",
+        "type": "number",
+        "value": 85,
+        "min": 10,
+        "max": 100,
+        "label": {
+          "en": "Disk",
+          "nl": "Schijf"
+        },
+        "units": {
+          "en": "%"
+        }
+      },
+      {
+        "id": "th_states",
+        "type": "number",
+        "value": 50,
+        "min": 1,
+        "max": 100,
+        "label": {
+          "en": "Firewall states (of limit)",
+          "nl": "Firewall-states (van limiet)"
+        },
+        "units": {
+          "en": "%"
+        }
+      },
+      {
+        "id": "th_load",
+        "type": "number",
+        "value": 4,
+        "min": 0.5,
+        "max": 64,
+        "label": {
+          "en": "CPU load (5 min)",
+          "nl": "CPU-belasting (5 min)"
+        },
+        "step": 0.5,
+        "hint": {
+          "en": "Load average; a sensible limit is the number of CPU cores.",
+          "nl": "Load average; een redelijke grens is het aantal CPU-kernen."
+        }
+      },
+      {
+        "id": "th_errors",
+        "type": "number",
+        "value": 100,
+        "min": 1,
+        "max": 100000,
+        "label": {
+          "en": "Interface errors per hour",
+          "nl": "Interfacefouten per uur"
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Firewall",
+      "nl": "Firewall"
+    },
+    "children": [
+      {
+        "id": "hostname",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Hostname",
+          "nl": "Hostnaam"
+        }
+      },
+      {
+        "id": "version",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "OPNsense version",
+          "nl": "OPNsense-versie"
+        }
+      },
+      {
+        "id": "url",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Address",
+          "nl": "Adres"
+        }
+      },
+      {
+        "id": "fingerprint",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Trusted certificate (SHA-256)",
+          "nl": "Vertrouwd certificaat (SHA-256)"
+        }
+      },
+      {
+        "id": "missing_privileges",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Missing privileges",
+          "nl": "Ontbrekende rechten"
+        },
+        "hint": {
+          "en": "Data that needs these privileges on the API user is not shown. Add them under System → Access → Users.",
+          "nl": "Gegevens die deze rechten op de API-gebruiker nodig hebben worden niet getoond. Voeg ze toe onder System → Access → Users."
+        }
+      },
+      {
+        "id": "last_error",
+        "type": "label",
+        "value": "",
+        "label": {
+          "en": "Last error",
+          "nl": "Laatste fout"
+        }
+      }
+    ]
+  }
+]

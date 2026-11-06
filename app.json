@@ -1,0 +1,1052 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "nl.hawk-it.opnsense",
+  "version": "1.0.0",
+  "compatibility": ">=12.3.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "brandColor": "#D94F00",
+  "name": {
+    "en": "OPNsense",
+    "nl": "OPNsense"
+  },
+  "description": {
+    "en": "Your firewall's health at a glance",
+    "nl": "De gezondheid van je firewall in één oogopslag"
+  },
+  "category": [
+    "security"
+  ],
+  "tags": {
+    "en": [
+      "opnsense",
+      "firewall",
+      "router",
+      "gateway",
+      "network",
+      "monitoring",
+      "internet",
+      "wan",
+      "latency"
+    ],
+    "nl": [
+      "opnsense",
+      "firewall",
+      "router",
+      "gateway",
+      "netwerk",
+      "monitoring",
+      "internet",
+      "wan",
+      "latency"
+    ]
+  },
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Andre van Wijk",
+    "email": "andre.van.wijk@hawk-it.nl"
+  },
+  "homepage": "https://hawk-it.nl",
+  "support": "mailto:andre.van.wijk@hawk-it.nl",
+  "source": "https://github.com/hawk1109/homey-opnsense",
+  "bugs": {
+    "url": "https://github.com/hawk1109/homey-opnsense/issues"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Andre van Wijk",
+        "email": "andre.van.wijk@hawk-it.nl"
+      }
+    ]
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "problem_started",
+        "title": {
+          "en": "A problem started",
+          "nl": "Er ontstond een probleem"
+        },
+        "tokens": [
+          {
+            "name": "problem",
+            "type": "string",
+            "title": {
+              "en": "Problem",
+              "nl": "Probleem"
+            },
+            "example": {
+              "en": "IGMP Proxy stopped",
+              "nl": "IGMP Proxy gestopt"
+            }
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "title": {
+              "en": "Code",
+              "nl": "Code"
+            },
+            "example": {
+              "en": "service:igmpproxy"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "problem_cleared",
+        "title": {
+          "en": "A problem was resolved",
+          "nl": "Een probleem is opgelost"
+        },
+        "tokens": [
+          {
+            "name": "problem",
+            "type": "string",
+            "title": {
+              "en": "Problem",
+              "nl": "Probleem"
+            },
+            "example": {
+              "en": "IGMP Proxy stopped",
+              "nl": "IGMP Proxy gestopt"
+            }
+          },
+          {
+            "name": "code",
+            "type": "string",
+            "title": {
+              "en": "Code",
+              "nl": "Code"
+            },
+            "example": {
+              "en": "service:igmpproxy"
+            }
+          },
+          {
+            "name": "minutes",
+            "type": "number",
+            "title": {
+              "en": "Duration (minutes)",
+              "nl": "Duur (minuten)"
+            },
+            "example": 4
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "wan_down",
+        "title": {
+          "en": "Internet went down",
+          "nl": "Internet viel weg"
+        },
+        "tokens": [
+          {
+            "name": "gateway",
+            "type": "string",
+            "title": {
+              "en": "Gateway",
+              "nl": "Gateway"
+            },
+            "example": {
+              "en": "WAN_PPPOE"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "wan_up",
+        "title": {
+          "en": "Internet came back",
+          "nl": "Internet is terug"
+        },
+        "tokens": [
+          {
+            "name": "gateway",
+            "type": "string",
+            "title": {
+              "en": "Gateway",
+              "nl": "Gateway"
+            },
+            "example": {
+              "en": "WAN_PPPOE"
+            }
+          },
+          {
+            "name": "minutes",
+            "type": "number",
+            "title": {
+              "en": "Down for (minutes)",
+              "nl": "Weg geweest (minuten)"
+            },
+            "example": 3
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "service_stopped",
+        "title": {
+          "en": "A service stopped",
+          "nl": "Een service is gestopt"
+        },
+        "tokens": [
+          {
+            "name": "service",
+            "type": "string",
+            "title": {
+              "en": "Service",
+              "nl": "Service"
+            },
+            "example": {
+              "en": "IGMP Proxy"
+            }
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "title": {
+              "en": "Service id",
+              "nl": "Service-id"
+            },
+            "example": {
+              "en": "igmpproxy"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "service_started",
+        "title": {
+          "en": "A service started again",
+          "nl": "Een service draait weer"
+        },
+        "tokens": [
+          {
+            "name": "service",
+            "type": "string",
+            "title": {
+              "en": "Service",
+              "nl": "Service"
+            },
+            "example": {
+              "en": "IGMP Proxy"
+            }
+          },
+          {
+            "name": "id",
+            "type": "string",
+            "title": {
+              "en": "Service id",
+              "nl": "Service-id"
+            },
+            "example": {
+              "en": "igmpproxy"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "unreachable",
+        "title": {
+          "en": "Firewall became unreachable",
+          "nl": "Firewall werd onbereikbaar"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "reachable",
+        "title": {
+          "en": "Firewall is reachable again",
+          "nl": "Firewall is weer bereikbaar"
+        },
+        "tokens": [
+          {
+            "name": "minutes",
+            "type": "number",
+            "title": {
+              "en": "Unreachable for (minutes)",
+              "nl": "Onbereikbaar geweest (minuten)"
+            },
+            "example": 5
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "rebooted",
+        "title": {
+          "en": "Firewall rebooted",
+          "nl": "Firewall is herstart"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is_healthy",
+        "title": {
+          "en": "Is !{{healthy|not healthy}}",
+          "nl": "Is !{{gezond|niet gezond}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "wan_online",
+        "title": {
+          "en": "Internet is !{{up|down}}",
+          "nl": "Internet is !{{in de lucht|weg}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      },
+      {
+        "id": "service_running",
+        "title": {
+          "en": "Service !{{is|is not}} running",
+          "nl": "Service !{{draait|draait niet}}"
+        },
+        "titleFormatted": {
+          "en": "[[service]] !{{is|is not}} running",
+          "nl": "[[service]] !{{draait|draait niet}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          },
+          {
+            "type": "autocomplete",
+            "name": "service",
+            "title": {
+              "en": "Service",
+              "nl": "Service"
+            },
+            "placeholder": {
+              "en": "IGMP Proxy",
+              "nl": "IGMP Proxy"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "restart_service",
+        "title": {
+          "en": "Restart a service",
+          "nl": "Herstart een service"
+        },
+        "titleFormatted": {
+          "en": "Restart [[service]]",
+          "nl": "Herstart [[service]]"
+        },
+        "hint": {
+          "en": "Needs the 'Status: Services' privilege on the API user.",
+          "nl": "Vereist het recht 'Status: Services' op de API-gebruiker."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          },
+          {
+            "type": "autocomplete",
+            "name": "service",
+            "title": {
+              "en": "Service",
+              "nl": "Service"
+            },
+            "placeholder": {
+              "en": "IGMP Proxy",
+              "nl": "IGMP Proxy"
+            }
+          }
+        ]
+      },
+      {
+        "id": "refresh",
+        "title": {
+          "en": "Refresh now",
+          "nl": "Nu verversen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=firewall"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Firewall",
+        "nl": "Firewall"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "alarm_generic",
+        "opn_status",
+        "opn_wan_online",
+        "opn_wan_latency",
+        "opn_wan_loss",
+        "opn_wan_download",
+        "opn_wan_upload",
+        "opn_load",
+        "opn_memory",
+        "measure_temperature",
+        "opn_disk",
+        "opn_states",
+        "opn_services_down",
+        "opn_if_errors",
+        "opn_uptime"
+      ],
+      "capabilitiesOptions": {
+        "alarm_generic": {
+          "title": {
+            "en": "Problem",
+            "nl": "Probleem"
+          },
+          "insightsTitleTrue": {
+            "en": "Problem",
+            "nl": "Probleem"
+          },
+          "insightsTitleFalse": {
+            "en": "Healthy",
+            "nl": "Gezond"
+          }
+        },
+        "measure_temperature": {
+          "title": {
+            "en": "Temperature",
+            "nl": "Temperatuur"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/firewall/assets/images/small.png",
+        "large": "/drivers/firewall/assets/images/large.png",
+        "xlarge": "/drivers/firewall/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "connect",
+          "navigation": {
+            "next": "list_devices"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": true
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "repair_connect"
+        }
+      ],
+      "id": "firewall",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Monitoring",
+            "nl": "Monitoring"
+          },
+          "children": [
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "value": 60,
+              "min": 30,
+              "max": 900,
+              "label": {
+                "en": "Update interval",
+                "nl": "Verversingsinterval"
+              },
+              "units": {
+                "en": "s"
+              }
+            },
+            {
+              "id": "gateway_name",
+              "type": "text",
+              "value": "",
+              "label": {
+                "en": "Gateway",
+                "nl": "Gateway"
+              },
+              "hint": {
+                "en": "Gateway name as shown under System → Gateways, e.g. WAN_PPPOE. Leave empty to use the first monitored gateway.",
+                "nl": "Naam van de gateway zoals onder System → Gateways, bijv. WAN_PPPOE. Leeg laten voor de eerste gemonitorde gateway."
+              }
+            },
+            {
+              "id": "wan_interface",
+              "type": "text",
+              "value": "WAN",
+              "label": {
+                "en": "WAN interface for throughput",
+                "nl": "WAN-interface voor doorvoer"
+              },
+              "hint": {
+                "en": "Interface description (WAN) or device name (pppoe0) used for download/upload speed.",
+                "nl": "Interfacebeschrijving (WAN) of apparaatnaam (pppoe0) voor de download-/uploadsnelheid."
+              }
+            },
+            {
+              "id": "ignore_services",
+              "type": "text",
+              "value": "",
+              "label": {
+                "en": "Ignore services",
+                "nl": "Services negeren"
+              },
+              "hint": {
+                "en": "Comma-separated ids, names or descriptions; * is a wildcard. Example: openssh, dpinger*",
+                "nl": "Komma-gescheiden ids, namen of beschrijvingen; * is een wildcard. Voorbeeld: openssh, dpinger*"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Thresholds",
+            "nl": "Drempels"
+          },
+          "children": [
+            {
+              "id": "th_latency",
+              "type": "number",
+              "value": 50,
+              "min": 1,
+              "max": 2000,
+              "label": {
+                "en": "WAN latency",
+                "nl": "WAN-latency"
+              },
+              "units": {
+                "en": "ms"
+              }
+            },
+            {
+              "id": "th_loss",
+              "type": "number",
+              "value": 5,
+              "min": 1,
+              "max": 100,
+              "label": {
+                "en": "WAN packet loss",
+                "nl": "WAN-pakketverlies"
+              },
+              "units": {
+                "en": "%"
+              }
+            },
+            {
+              "id": "th_temperature",
+              "type": "number",
+              "value": 75,
+              "min": 30,
+              "max": 110,
+              "label": {
+                "en": "Temperature",
+                "nl": "Temperatuur"
+              },
+              "units": {
+                "en": "°C"
+              }
+            },
+            {
+              "id": "th_memory",
+              "type": "number",
+              "value": 90,
+              "min": 10,
+              "max": 100,
+              "label": {
+                "en": "Memory",
+                "nl": "Geheugen"
+              },
+              "units": {
+                "en": "%"
+              }
+            },
+            {
+              "id": "th_disk",
+              "type": "number",
+              "value": 85,
+              "min": 10,
+              "max": 100,
+              "label": {
+                "en": "Disk",
+                "nl": "Schijf"
+              },
+              "units": {
+                "en": "%"
+              }
+            },
+            {
+              "id": "th_states",
+              "type": "number",
+              "value": 50,
+              "min": 1,
+              "max": 100,
+              "label": {
+                "en": "Firewall states (of limit)",
+                "nl": "Firewall-states (van limiet)"
+              },
+              "units": {
+                "en": "%"
+              }
+            },
+            {
+              "id": "th_load",
+              "type": "number",
+              "value": 4,
+              "min": 0.5,
+              "max": 64,
+              "label": {
+                "en": "CPU load (5 min)",
+                "nl": "CPU-belasting (5 min)"
+              },
+              "step": 0.5,
+              "hint": {
+                "en": "Load average; a sensible limit is the number of CPU cores.",
+                "nl": "Load average; een redelijke grens is het aantal CPU-kernen."
+              }
+            },
+            {
+              "id": "th_errors",
+              "type": "number",
+              "value": 100,
+              "min": 1,
+              "max": 100000,
+              "label": {
+                "en": "Interface errors per hour",
+                "nl": "Interfacefouten per uur"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Firewall",
+            "nl": "Firewall"
+          },
+          "children": [
+            {
+              "id": "hostname",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Hostname",
+                "nl": "Hostnaam"
+              }
+            },
+            {
+              "id": "version",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "OPNsense version",
+                "nl": "OPNsense-versie"
+              }
+            },
+            {
+              "id": "url",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Address",
+                "nl": "Adres"
+              }
+            },
+            {
+              "id": "fingerprint",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Trusted certificate (SHA-256)",
+                "nl": "Vertrouwd certificaat (SHA-256)"
+              }
+            },
+            {
+              "id": "missing_privileges",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Missing privileges",
+                "nl": "Ontbrekende rechten"
+              },
+              "hint": {
+                "en": "Data that needs these privileges on the API user is not shown. Add them under System → Access → Users.",
+                "nl": "Gegevens die deze rechten op de API-gebruiker nodig hebben worden niet getoond. Voeg ze toe onder System → Access → Users."
+              }
+            },
+            {
+              "id": "last_error",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Last error",
+                "nl": "Laatste fout"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "widgets": {
+    "health": {
+      "name": {
+        "en": "Firewall health",
+        "nl": "Firewall-gezondheid"
+      },
+      "height": 640,
+      "transparent": false,
+      "settings": [
+        {
+          "id": "show_charts",
+          "type": "checkbox",
+          "title": {
+            "en": "Show 24-hour latency and throughput",
+            "nl": "Toon latency en doorvoer (24 uur)"
+          },
+          "value": true
+        },
+        {
+          "id": "show_services",
+          "type": "checkbox",
+          "title": {
+            "en": "Show services",
+            "nl": "Toon services"
+          },
+          "value": true
+        },
+        {
+          "id": "show_events",
+          "type": "checkbox",
+          "title": {
+            "en": "Show recent events",
+            "nl": "Toon recente gebeurtenissen"
+          },
+          "value": true
+        }
+      ],
+      "devices": {
+        "type": "app",
+        "singular": true,
+        "filter": {
+          "driver_id": "firewall"
+        }
+      },
+      "api": {
+        "getData": {
+          "method": "GET",
+          "path": "/"
+        }
+      },
+      "id": "health"
+    }
+  },
+  "capabilities": {
+    "opn_disk": {
+      "type": "number",
+      "title": {
+        "en": "Disk",
+        "nl": "Schijf"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "insights": true,
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/disk.svg",
+      "min": 0,
+      "max": 100
+    },
+    "opn_if_errors": {
+      "type": "number",
+      "title": {
+        "en": "Interface errors (last hour)",
+        "nl": "Interfacefouten (laatste uur)"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/capabilities/errors.svg"
+    },
+    "opn_load": {
+      "type": "number",
+      "title": {
+        "en": "CPU load",
+        "nl": "CPU-belasting"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 2,
+      "insights": true,
+      "icon": "/assets/capabilities/cpu.svg"
+    },
+    "opn_memory": {
+      "type": "number",
+      "title": {
+        "en": "Memory",
+        "nl": "Geheugen"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "insights": true,
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/memory.svg",
+      "min": 0,
+      "max": 100
+    },
+    "opn_services_down": {
+      "type": "number",
+      "title": {
+        "en": "Services stopped",
+        "nl": "Services gestopt"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/capabilities/services.svg"
+    },
+    "opn_states": {
+      "type": "number",
+      "title": {
+        "en": "Firewall states",
+        "nl": "Firewall-states"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/capabilities/states.svg"
+    },
+    "opn_status": {
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/status.svg"
+    },
+    "opn_uptime": {
+      "type": "string",
+      "title": {
+        "en": "Uptime",
+        "nl": "Uptime"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/uptime.svg"
+    },
+    "opn_wan_download": {
+      "type": "number",
+      "title": {
+        "en": "WAN download",
+        "nl": "WAN-download"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 1,
+      "insights": true,
+      "units": {
+        "en": "Mbit/s"
+      },
+      "icon": "/assets/capabilities/download.svg"
+    },
+    "opn_wan_latency": {
+      "type": "number",
+      "title": {
+        "en": "WAN latency",
+        "nl": "WAN-latency"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 1,
+      "insights": true,
+      "units": {
+        "en": "ms"
+      },
+      "icon": "/assets/capabilities/latency.svg"
+    },
+    "opn_wan_loss": {
+      "type": "number",
+      "title": {
+        "en": "WAN packet loss",
+        "nl": "WAN-pakketverlies"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 1,
+      "insights": true,
+      "units": {
+        "en": "%"
+      },
+      "icon": "/assets/capabilities/loss.svg",
+      "min": 0,
+      "max": 100
+    },
+    "opn_wan_online": {
+      "type": "boolean",
+      "title": {
+        "en": "Internet",
+        "nl": "Internet"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/wan.svg",
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Internet up",
+        "nl": "Internet in de lucht"
+      },
+      "insightsTitleFalse": {
+        "en": "Internet down",
+        "nl": "Internet weg"
+      }
+    },
+    "opn_wan_upload": {
+      "type": "number",
+      "title": {
+        "en": "WAN upload",
+        "nl": "WAN-upload"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 1,
+      "insights": true,
+      "units": {
+        "en": "Mbit/s"
+      },
+      "icon": "/assets/capabilities/upload.svg"
+    }
+  }
+}

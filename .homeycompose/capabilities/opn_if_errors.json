@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Interface errors (last hour)",
+    "nl": "Interfacefouten (laatste uur)"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/capabilities/errors.svg"
+}

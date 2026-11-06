@@ -1,0 +1,16 @@
+{
+  "type": "number",
+  "title": {
+    "en": "WAN upload",
+    "nl": "WAN-upload"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 1,
+  "insights": true,
+  "units": {
+    "en": "Mbit/s"
+  },
+  "icon": "/assets/capabilities/upload.svg"
+}

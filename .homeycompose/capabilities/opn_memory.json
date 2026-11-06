@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Memory",
+    "nl": "Geheugen"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 0,
+  "insights": true,
+  "units": {
+    "en": "%"
+  },
+  "icon": "/assets/capabilities/memory.svg",
+  "min": 0,
+  "max": 100
+}

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    /* Categorical slots (same validated palette as the OJ widget, fixed order) */
+    --s1: #2a78d6; --s2: #eb6834;
+    /* Status palette - reserved, always paired with an icon + label */
+    --good: #0ca30c; --warning: #fab219; --critical: #d03b3b;
+    --track: rgba(0, 0, 0, .06);
+    --grid: #e1e0d9; --axis: #c3c2b7;
+    --tip-bg: #1f1f1e; --tip-fg: #fff;
+    --tile: rgba(0, 0, 0, .035);
+  }
+  .homey-dark-mode {
+    --s1: #3987e5; --s2: #d95926;
+    --track: rgba(255, 255, 255, .08);
+    --grid: #2c2c2a; --axis: #383835;
+    --tip-bg: #f0efec; --tip-fg: #111;
+    --tile: rgba(255, 255, 255, .05);
+  }
+
+  html, body { margin: 0; padding: 0; background: transparent; }
+  #root { position: relative; }
+  .muted { color: var(--homey-text-color-light); }
+  .num { font-variant-numeric: tabular-nums; }
+  .ico { display: inline-block; width: 16px; height: 16px; flex: 0 0 16px; vertical-align: -3px; }
+
+  /* Status header */
+  .status { display: flex; align-items: flex-start; gap: 10px; }
+  .status .ico { width: 22px; height: 22px; flex-basis: 22px; margin-top: 3px; }
+  .status-title { font-size: var(--homey-font-size-large); line-height: var(--homey-line-height-large); font-weight: var(--homey-font-weight-bold); }
+  .status-sub { font-size: var(--homey-font-size-small); line-height: var(--homey-line-height-small); margin-top: 2px; }
+  .problems { margin: var(--homey-su-2) 0 0; padding: 0; list-style: none; }
+  .problems li { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; padding: 3px 0; }
+  .problems .since { margin-left: auto; font-size: 12px; white-space: nowrap; }
+
+  /* Internet hero */
+  .section { margin-top: var(--homey-su-5); }
+  .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--homey-su-2); gap: 8px; }
+  .section-title { font-size: var(--homey-font-size-small); line-height: var(--homey-line-height-small); font-weight: var(--homey-font-weight-medium); }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; line-height: 16px; }
+  .wan { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--homey-su-3); }
+  .hero-value { font-size: 48px; line-height: 52px; font-weight: var(--homey-font-weight-bold); letter-spacing: -1px; }
+  .hero-unit { font-size: var(--homey-font-size-large); font-weight: var(--homey-font-weight-medium); margin-left: 3px; letter-spacing: 0; }
+  .hero-label { font-size: 12px; line-height: 16px; }
+  .wan-side { display: grid; grid-template-columns: auto auto; gap: 2px 14px; text-align: right; font-size: 13px; line-height: 18px; }
+  .wan-side b { font-weight: var(--homey-font-weight-medium); }
+
+  /* Charts */
+  .chart { margin-top: var(--homey-su-3); }
+  .chart-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; line-height: 16px; margin-bottom: 4px; }
+  .legend { display: flex; gap: 12px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .chip { width: 10px; height: 2px; border-radius: 1px; display: inline-block; }
+  svg.plot { display: block; width: 100%; overflow: visible; touch-action: pan-y; }
+  svg.plot .grid { stroke: var(--grid); stroke-width: 1; }
+  svg.plot .base { stroke: var(--axis); stroke-width: 1; }
+  svg.plot .thr { stroke: var(--warning); stroke-width: 1; stroke-dasharray: 3 3; }
+  svg.plot text { font-size: 11px; fill: var(--homey-text-color-light); }
+  svg.plot .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  svg.plot .down { fill: var(--critical); opacity: .16; }
+  svg.plot .cross { stroke: var(--homey-text-color-light); stroke-width: 1; opacity: 0; }
+  svg.plot .dot { stroke: var(--homey-background-color, #fff); stroke-width: 2; opacity: 0; }
+  svg.plot.hover .cross, svg.plot.hover .dot { opacity: 1; }
+
+  /* Tiles */
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .tile { background: var(--tile); border-radius: 12px; padding: 10px 10px 9px; min-width: 0; }
+  .tile-label { font-size: 12px; line-height: 16px; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile-label .ico { width: 13px; height: 13px; flex-basis: 13px; vertical-align: 0; }
+  .tile-value { font-size: 20px; line-height: 26px; font-weight: var(--homey-font-weight-medium); margin-top: 2px; white-space: nowrap; }
+  .tile-value small { font-size: 12px; font-weight: normal; margin-left: 1px; }
+  .meter { height: 4px; border-radius: 2px; background: var(--track); margin-top: 6px; overflow: hidden; }
+  .meter i { display: block; height: 100%; border-radius: 2px; background: var(--s1); }
+  .meter i.warn { background: var(--warning); }
+  .meter i.crit { background: var(--critical); }
+
+  /* Services */
+  .svc { display: flex; flex-wrap: wrap; gap: 6px; }
+  .svc span {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 12px; line-height: 16px;
+    padding: 4px 8px; border-radius: 999px; background: var(--tile); white-space: nowrap;
+  }
+  .svc span.bad { background: rgba(208, 59, 59, .12); font-weight: var(--homey-font-weight-medium); }
+  .svc span.ign { opacity: .55; }
+  .svc .d { width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+  .svc .bad .d { background: var(--critical); }
+  .svc .ign .d { background: var(--homey-text-color-light); }
+  .svc button.more { border: 0; font: inherit; color: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; line-height: 16px; padding: 4px 10px; border-radius: 999px; background: var(--tile); }
+
+  /* Events */
+  .ev { list-style: none; margin: 0; padding: 0; }
+  .ev li { display: grid; grid-template-columns: 44px 1fr; gap: 8px; font-size: 13px; line-height: 18px; padding: 4px 0; }
+  .ev li + li { border-top: 1px solid var(--grid); }
+  .ev time { font-size: 12px; }
+
+  .note { font-size: 12px; line-height: 16px; margin-top: var(--homey-su-3); }
+  .empty { padding: var(--homey-su-6) 0; text-align: center; font-size: var(--homey-font-size-small); }
+
+  /* Tooltip */
+  .tip {
+    position: absolute; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .12s;
+    background: var(--tip-bg); color: var(--tip-fg); border-radius: 8px; padding: 6px 8px;
+    font-size: 12px; line-height: 16px; white-space: nowrap; transform: translate(-50%, calc(-100% - 8px));
+  }
+  .tip.show { opacity: 1; }
+  .tip .t-row { display: flex; align-items: center; gap: 6px; }
+  .tip .t-row b { margin-left: auto; padding-left: 10px; font-weight: 600; }
+</style>
+</head>
+<body class="homey-widget">
+<div id="root"></div>
+<div class="tip" id="tip"></div>
+
+<script type="text/javascript">
+  // Status icons: shape differs per state, so state never relies on color alone.
+  var ICON = {
+    good: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--good)"/><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    warning: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 22.5 21h-21z" fill="var(--warning)" stroke="var(--warning)" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 9v5" stroke="#0b0b0b" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.5" r="1.4" fill="#0b0b0b"/></svg>',
+    critical: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="var(--critical)"/><path d="m8 8 8 8M16 8l-8 8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  };
+  var CRITICAL_CODES = /^(wan_down|service:|unreachable)/;
+
+  function onHomeyReady(Homey) {
+    var root = document.getElementById('root');
+    var tip = document.getElementById('tip');
+    var settings = Homey.getSettings() || {};
+    var showCharts = settings.show_charts !== false;
+    var showServices = settings.show_services !== false;
+    var showEvents = settings.show_events !== false;
+    var data = null;
+    var readyCalled = false;
+    var servicesOpen = false;
+    var tr = function (k, t) { return Homey.__('widget.' + k, t); };
+
+    function ids() {
+      try { return (Homey.getDeviceIds && Homey.getDeviceIds()) || []; } catch (e) { return []; }
+    }
+    function load() {
+      var q = ids();
+      return Homey.api('GET', '/' + (q.length ? '?ids=' + encodeURIComponent(q.join(',')) : ''))
+        .then(function (d) { data = d; render(); })
+        .catch(function (e) {
+          root.innerHTML = '<div class="empty muted">' + esc(e && e.message ? e.message : String(e)) + '</div>';
+          done();
+        });
+    }
+
+    // ------------------------------------------------------------- formatting
+    function nf(v, dec) {
+      if (v == null || !isFinite(v)) return '–';
+      return Number(v).toLocaleString(data.language, { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    }
+    function rate(v) { return v == null ? '–' : nf(v, v < 10 ? 1 : 0); }
+    function hhmm(ms) {
+      return new Date(ms).toLocaleTimeString(data.language, { hour: '2-digit', minute: '2-digit', timeZone: data.timezone });
+    }
+    function when(ms) {
+      var sameDay = new Date(ms).toLocaleDateString('sv', { timeZone: data.timezone })
+        === new Date(data.now).toLocaleDateString('sv', { timeZone: data.timezone });
+      return sameDay ? hhmm(ms)
+        : new Date(ms).toLocaleDateString(data.language, { weekday: 'short', timeZone: data.timezone });
+    }
+    function ago(ms) {
+      var m = Math.max(0, Math.round((data.now - ms) / 60000));
+      return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min';
+    }
+    function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+    // ---------------------------------------------------------------- render
+    function render() {
+      hideTip();
+      var f = data.firewall;
+      if (!f) {
+        root.innerHTML = '<div class="empty muted">' + esc(tr('empty')) + '</div>';
+        done();
+        return;
+      }
+      root.innerHTML = header(f) + internet(f)
+        + (showCharts ? charts(f) : '')
+        + tiles(f)
+        + (showServices ? services(f) : '')
+        + (showEvents ? events(f) : '')
+        + (f.missingPrivileges && /:/.test(f.missingPrivileges)
+          ? '<div class="note muted">' + esc(tr('missing', { list: f.missingPrivileges })) + '</div>' : '');
+      bindCharts(f);
+      var more = document.getElementById('svc-more');
+      if (more) more.addEventListener('click', function (ev) { ev.stopPropagation(); servicesOpen = !servicesOpen; render(); });
+      done();
+    }
+
+    function header(f) {
+      var state = !f.reachable ? 'critical'
+        : (!f.problems.length ? 'good' : (f.problems.some(function (p) { return CRITICAL_CODES.test(p.code); }) ? 'critical' : 'warning'));
+      var title = !f.reachable ? tr('unreachable')
+        : (!f.problems.length ? tr('healthy') : (f.problems.length === 1 ? tr('problem') : tr('problems', { n: f.problems.length })));
+      var sub = [f.hostname || f.name, f.version ? 'OPNsense ' + f.version.replace(/-.*$/, '') : '',
+        !f.reachable && f.unreachableSince ? tr('unreachable_since', { time: hhmm(f.unreachableSince) })
+          : (f.uptime ? tr('uptime', { uptime: f.uptime }) : '')].filter(Boolean).join(' · ');
+      var list = f.reachable && f.problems.length
+        ? '<ul class="problems">' + f.problems.map(function (p) {
+          return '<li>' + ICON[CRITICAL_CODES.test(p.code) ? 'critical' : 'warning'] + '<span>' + esc(p.text) + '</span>'
+            + '<span class="since muted num">' + esc(ago(p.since)) + '</span></li>';
+        }).join('') + '</ul>' : '';
+      return '<div class="status">' + ICON[state] + '<div><div class="status-title">' + esc(title) + '</div>'
+        + '<div class="status-sub muted">' + esc(sub) + '</div></div></div>' + list;
+    }
+
+    function internet(f) {
+      var g = f.gateway;
+      if (!g) return '';
+      var pill = g.online
+        ? '<span class="pill">' + ICON.good + esc(tr('online')) + '</span>'
+        : '<span class="pill">' + ICON.critical + esc(tr('offline')) + '</span>';
+      var latency = g.online && g.delayMs != null
+        ? '<span class="hero-value">' + nf(g.delayMs, g.delayMs < 10 ? 1 : 0) + '<span class="hero-unit">' + esc(tr('ms')) + '</span></span>'
+        : '<span class="hero-value">–</span>';
+      return '<div class="section"><div class="section-head"><span class="section-title">' + esc(tr('internet')) + ' · ' + esc(g.name) + '</span>' + pill + '</div>'
+        + '<div class="wan"><div><div>' + latency + '</div><div class="hero-label muted">'
+        + esc(g.monitored ? tr('latency') + ' → ' + g.monitor : tr('not_monitored')) + '</div></div>'
+        + '<div class="wan-side num">'
+        + '<span class="muted">' + esc(tr('loss')) + '</span><b>' + (g.lossPct == null ? '–' : nf(g.lossPct, 1) + '%') + '</b>'
+        + '<span class="muted">' + esc(tr('down')) + '</span><b>' + rate(f.rxMbps) + ' ' + esc(tr('mbps')) + '</b>'
+        + '<span class="muted">' + esc(tr('up')) + '</span><b>' + rate(f.txMbps) + ' ' + esc(tr('mbps')) + '</b>'
+        + '</div></div></div>';
+    }
+
+    // ---------------------------------------------------------------- charts
+    var W = 320; // re-measured on render
+    var H = 84;
+    var PAD_L = 0; var PAD_R = 34; var PAD_T = 6; var PAD_B = 16;
+
+    function charts(f) {
+      W = Math.max(200, Math.floor(root.getBoundingClientRect().width || 320));
+      var hist = f.history || [];
+      if (hist.length < 2) {
+        return '<div class="section"><div class="section-head"><span class="section-title">' + esc(tr('last_24h')) + '</span>'
+          + '<span class="muted" style="font-size:12px">' + esc(tr('collecting')) + '</span></div></div>';
+      }
+      var from = data.now - 24 * 3600 * 1000;
+      var hasTput = hist.some(function (r) { return r[3] != null; });
+      var collecting = hist[0][0] > from + 30 * 60 * 1000;
+      return '<div class="section"><div class="section-head"><span class="section-title">' + esc(tr('last_24h')) + '</span>'
+        + (collecting ? '<span class="muted" style="font-size:12px">' + esc(tr('collecting')) + '</span>' : '') + '</div>'
+        + chart('lat', tr('latency_chart') + ' (' + tr('ms') + ')', hist, from, [{ i: 1, c: 'var(--s1)', name: tr('latency'), unit: tr('ms') }],
+          f.thresholds && f.thresholds.latencyMs)
+        + (hasTput ? chart('tput', tr('throughput') + ' (' + tr('mbps') + ')', hist, from, [
+          { i: 3, c: 'var(--s1)', name: tr('down'), unit: tr('mbps') },
+          { i: 4, c: 'var(--s2)', name: tr('up'), unit: tr('mbps') }]) : '')
+        + '</div>';
+    }
+
+    function chart(id, title, hist, from, series, threshold) {
+      var to = data.now;
+      var x = function (t) { return PAD_L + (t - from) / (to - from) * (W - PAD_L - PAD_R); };
+      var max = 0;
+      hist.forEach(function (r) { series.forEach(function (s) { if (r[s.i] != null) max = Math.max(max, r[s.i]); }); });
+      // Only show the threshold line when it is within reach of the data, so it doesn't flatten the curve.
+      var showThr = threshold && max >= threshold * 0.8;
+      if (showThr) max = Math.max(max, threshold);
+      var top = niceMax(max || 1);
+      var y = function (v) { return PAD_T + (1 - v / top) * (H - PAD_T - PAD_B); };
+      var base = y(0);
+
+      var svg = '<svg class="plot" id="c-' + id + '" viewBox="0 0 ' + W + ' ' + H + '" height="' + H + '" role="img" aria-label="' + esc(title) + '">';
+      // Outages first (behind lines)
+      hist.forEach(function (r) {
+        if (r[5]) svg += '<rect class="down" x="' + x(r[0]) + '" y="' + PAD_T + '" width="' + Math.max(2, x(r[0] + 300000) - x(r[0])) + '" height="' + (base - PAD_T) + '"/>';
+      });
+      svg += '<line class="grid" x1="' + PAD_L + '" x2="' + (W - PAD_R) + '" y1="' + y(top / 2) + '" y2="' + y(top / 2) + '"/>';
+      svg += '<line class="grid" x1="' + PAD_L + '" x2="' + (W - PAD_R) + '" y1="' + y(top) + '" y2="' + y(top) + '"/>';
+      svg += '<line class="base" x1="' + PAD_L + '" x2="' + (W - PAD_R) + '" y1="' + base + '" y2="' + base + '"/>';
+      svg += '<text x="' + (W - PAD_R + 6) + '" y="' + (y(top) + 4) + '">' + nf(top, top < 10 ? 1 : 0) + '</text>';
+      svg += '<text x="' + (W - PAD_R + 6) + '" y="' + (y(top / 2) + 4) + '">' + nf(top / 2, top < 20 ? 1 : 0) + '</text>';
+      if (showThr) svg += '<line class="thr" x1="' + PAD_L + '" x2="' + (W - PAD_R) + '" y1="' + y(threshold) + '" y2="' + y(threshold) + '"/>';
+
+      series.forEach(function (s) {
+        var d = ''; var pen = false;
+        hist.forEach(function (r) {
+          var v = r[s.i];
+          if (v == null) { pen = false; return; }
+          d += (pen ? 'L' : 'M') + x(r[0] + 150000).toFixed(1) + ' ' + y(v).toFixed(1);
+          pen = true;
+        });
+        svg += '<path class="line" d="' + d + '" stroke="' + s.c + '"/>';
+      });
+      // Time axis: 4 ticks
+      for (var k = 0; k <= 4; k += 1) {
+        var t = from + k * 6 * 3600 * 1000;
+        var anchor = k === 0 ? 'start' : (k === 4 ? 'end' : 'middle');
+        svg += '<text x="' + x(t) + '" y="' + (H - 2) + '" text-anchor="' + anchor + '">' + (k === 4 ? esc(tr('now')) : hhmm(t)) + '</text>';
+      }
+      svg += '<line class="cross" x1="0" x2="0" y1="' + PAD_T + '" y2="' + base + '"/>';
+      series.forEach(function (s, j) { svg += '<circle class="dot" data-s="' + j + '" r="4" fill="' + s.c + '"/>'; });
+      svg += '<rect class="hit" x="0" y="0" width="' + (W - PAD_R) + '" height="' + H + '" fill="transparent"/>';
+      svg += '</svg>';
+
+      var legend = series.length > 1
+        ? '<span class="legend muted">' + series.map(function (s) { return '<span><span class="chip" style="background:' + s.c + '"></span>' + esc(s.name) + '</span>'; }).join('') + '</span>'
+        : '';
+      charts.meta = charts.meta || {};
+      charts.meta[id] = { x: x, y: y, series: series, hist: hist, base: base };
+      return '<div class="chart"><div class="chart-head"><span class="muted">' + esc(title) + '</span>' + legend + '</div>' + svg + '</div>';
+    }
+
+    function niceMax(v) {
+      var p = Math.pow(10, Math.floor(Math.log10(v)));
+      var n = v / p;
+      return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p;
+    }
+
+    /** Crosshair + tooltip: nearest bucket under the pointer, all series at that time. */
+    function bindCharts() {
+      if (!charts.meta) return;
+      Object.keys(charts.meta).forEach(function (id) {
+        var el = document.getElementById('c-' + id);
+        if (!el) return;
+        var m = charts.meta[id];
+        var move = function (ev) {
+          var box = el.getBoundingClientRect();
+          var px = ((ev.touches ? ev.touches[0].clientX : ev.clientX) - box.left) * (W / box.width);
+          var best = null; var bd = Infinity;
+          m.hist.forEach(function (r) {
+            var dx = Math.abs(m.x(r[0] + 150000) - px);
+            if (dx < bd) { bd = dx; best = r; }
+          });
+          if (!best) return;
+          var cx = m.x(best[0] + 150000);
+          var cross = el.querySelector('.cross');
+          cross.setAttribute('x1', cx); cross.setAttribute('x2', cx);
+          var rows = '<div class="t-row"><span>' + hhmm(best[0]) + '–' + hhmm(best[0] + 300000) + '</span></div>';
+          m.series.forEach(function (s, j) {
+            var v = best[s.i];
+            var dot = el.querySelector('.dot[data-s="' + j + '"]');
+            if (v == null) { dot.setAttribute('cy', -20); } else { dot.setAttribute('cx', cx); dot.setAttribute('cy', m.y(v)); }
+            rows += '<div class="t-row"><span class="chip" style="background:' + s.c + '"></span><span>' + esc(s.name) + '</span><b>'
+              + (v == null ? '–' : nf(v, v < 10 ? 1 : 0) + ' ' + esc(s.unit)) + '</b></div>';
+          });
+          if (best[5]) rows += '<div class="t-row"><span>' + esc(tr('offline')) + '</span></div>';
+          else if (id === 'lat' && best[2]) rows += '<div class="t-row"><span>' + esc(tr('loss')) + '</span><b>' + nf(best[2], 1) + '%</b></div>';
+          el.classList.add('hover');
+          tip.innerHTML = rows;
+          var rr = document.body.getBoundingClientRect();
+          var w = tip.offsetWidth || 140;
+          var left = box.left + cx * (box.width / W) - rr.left;
+          tip.style.left = Math.max(w / 2 + 4, Math.min(rr.width - w / 2 - 4, left)) + 'px';
+          tip.style.top = (box.top - rr.top + 4) + 'px';
+          tip.classList.add('show');
+        };
+        var leave = function () { el.classList.remove('hover'); hideTip(); };
+        el.addEventListener('mousemove', move);
+        el.addEventListener('touchstart', move, { passive: true });
+        el.addEventListener('touchmove', move, { passive: true });
+        el.addEventListener('mouseleave', leave);
+        el.addEventListener('touchend', function () { setTimeout(leave, 1500); });
+      });
+    }
+
+    // ---------------------------------------------------------------- tiles
+    function tiles(f) {
+      var t = f.thresholds || {};
+      var level = function (v, thr) { return v == null || !thr ? '' : (v >= thr ? 'crit' : (v >= thr * 0.8 ? 'warn' : '')); };
+      var tile = function (label, value, unit, meterPct, lvl) {
+        var badge = lvl === 'crit' ? ICON.critical : (lvl === 'warn' ? ICON.warning : '');
+        return '<div class="tile"><div class="tile-label muted">' + badge + esc(label) + '</div>'
+          + '<div class="tile-value">' + value + (unit ? '<small class="muted">' + esc(unit) + '</small>' : '') + '</div>'
+          + (meterPct != null ? '<div class="meter"><i class="' + lvl + '" style="width:' + Math.min(100, Math.max(2, meterPct)) + '%"></i></div>' : '')
+          + '</div>';
+      };
+      var load5 = f.load ? f.load[1] : null;
+      var html = [
+        tile(tr('cpu'), nf(load5, 2), '', null, level(load5, t.load)),
+        tile(tr('memory'), nf(f.memoryPct, 0), '%', f.memoryPct, level(f.memoryPct, t.memoryPct)),
+        tile(tr('temperature'), nf(f.temperature, 0), '°C', null, level(f.temperature, t.temperatureC)),
+        tile(tr('disk'), nf(f.diskPct, 0), '%', f.diskPct, level(f.diskPct, t.diskPct)),
+        tile(tr('states'), f.states ? compact(f.states.current) : '–', '', f.states ? f.states.pct : null, level(f.states && f.states.pct, t.statesPct)),
+        tile(tr('errors'), f.errorsLastHour == null ? '–' : compact(f.errorsLastHour), '', null, level(f.errorsLastHour, t.errorsPerHour)),
+      ].join('');
+      return '<div class="section"><div class="tiles num">' + html + '</div></div>';
+    }
+    function compact(v) {
+      if (v == null) return '–';
+      if (v >= 1e6) return nf(v / 1e6, 1) + 'M';
+      if (v >= 1e4) return nf(v / 1e3, 1) + 'K';
+      return nf(v, 0);
+    }
+
+    // ---------------------------------------------------------------- services
+    function services(f) {
+      if (!f.services.length) return '';
+      var ignored = {};
+      (f.ignored || []).forEach(function (id) { ignored[id] = true; });
+      var stopped = f.services.filter(function (s) { return !s.running && !ignored[s.id]; });
+      var head = stopped.length
+        ? '<span class="pill">' + ICON.critical + esc(stopped.length + ' ' + tr('stopped')) + '</span>'
+        : '<span class="pill">' + ICON.good + esc(tr('all_running', { n: f.services.length })) + '</span>';
+      var sorted = f.services.slice().sort(function (a, b) {
+        var ra = a.running ? 1 : (ignored[a.id] ? 0.5 : 0); var rb = b.running ? 1 : (ignored[b.id] ? 0.5 : 0);
+        return ra - rb || a.name.localeCompare(b.name);
+      });
+      var chip = function (s) {
+        var cls = !s.running ? (ignored[s.id] ? 'ign' : 'bad') : '';
+        var suffix = !s.running ? ' · ' + (ignored[s.id] ? tr('ignored') : tr('stopped')) : '';
+        return '<span class="' + cls + '"><i class="d"></i>' + esc(s.name) + esc(suffix) + '</span>';
+      };
+      // Running services collapse into one toggle; only what needs attention is always visible.
+      var notRunning = sorted.filter(function (s) { return !s.running; });
+      var running = sorted.filter(function (s) { return s.running; });
+      var chips = notRunning.map(chip).join('')
+        + (servicesOpen ? running.map(chip).join('') : '')
+        + (running.length ? '<button type="button" class="more" id="svc-more">' + (servicesOpen ? '' : '<i class="d" style="width:6px;height:6px;border-radius:50%;background:var(--good)"></i>')
+          + esc(servicesOpen ? tr('less') : tr('n_running', { n: running.length })) + '</button>' : '');
+      return '<div class="section"><div class="section-head"><span class="section-title">' + esc(tr('services')) + '</span>' + head + '</div>'
+        + '<div class="svc">' + chips + '</div></div>';
+    }
+
+    // ---------------------------------------------------------------- events
+    function events(f) {
+      var list = (f.events || []).slice(0, 5);
+      var body = list.length
+        ? '<ul class="ev">' + list.map(function (e) {
+          return '<li><time class="muted num">' + esc(when(e[0])) + '</time><span>' + esc(e[2]) + '</span></li>';
+        }).join('') + '</ul>'
+        : '<div class="muted" style="font-size:13px">' + esc(tr('no_events')) + '</div>';
+      return '<div class="section"><div class="section-head"><span class="section-title">' + esc(tr('events')) + '</span></div>' + body + '</div>';
+    }
+
+    // ---------------------------------------------------------------- misc
+    function hideTip() { tip.classList.remove('show'); }
+    document.addEventListener('click', hideTip);
+
+    function done() {
+      var h = Math.ceil(root.getBoundingClientRect().height) + 32;
+      if (!readyCalled) { readyCalled = true; Homey.ready({ height: h }); } else Homey.setHeight(h);
+    }
+
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { if (data) render(); }, 200);
+    });
+
+    Homey.on('opnsense:update', function () { load(); });
+    setInterval(load, 60000); // fallback when realtime events are missed
+    load();
+  }
+</script>
+</body>
+</html>

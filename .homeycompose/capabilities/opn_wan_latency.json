@@ -1,0 +1,16 @@
+{
+  "type": "number",
+  "title": {
+    "en": "WAN latency",
+    "nl": "WAN-latency"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 1,
+  "insights": true,
+  "units": {
+    "en": "ms"
+  },
+  "icon": "/assets/capabilities/latency.svg"
+}

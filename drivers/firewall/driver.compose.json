@@ -1,0 +1,84 @@
+{
+  "name": {
+    "en": "Firewall",
+    "nl": "Firewall"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "alarm_generic",
+    "opn_status",
+    "opn_wan_online",
+    "opn_wan_latency",
+    "opn_wan_loss",
+    "opn_wan_download",
+    "opn_wan_upload",
+    "opn_load",
+    "opn_memory",
+    "measure_temperature",
+    "opn_disk",
+    "opn_states",
+    "opn_services_down",
+    "opn_if_errors",
+    "opn_uptime"
+  ],
+  "capabilitiesOptions": {
+    "alarm_generic": {
+      "title": {
+        "en": "Problem",
+        "nl": "Probleem"
+      },
+      "insightsTitleTrue": {
+        "en": "Problem",
+        "nl": "Probleem"
+      },
+      "insightsTitleFalse": {
+        "en": "Healthy",
+        "nl": "Gezond"
+      }
+    },
+    "measure_temperature": {
+      "title": {
+        "en": "Temperature",
+        "nl": "Temperatuur"
+      }
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "/drivers/firewall/assets/images/small.png",
+    "large": "/drivers/firewall/assets/images/large.png",
+    "xlarge": "/drivers/firewall/assets/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "connect",
+      "navigation": {
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": true
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "repair_connect"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+ "name": "sophos.home.lan",
+ "versions": [
+  "OPNsense 26.7.8_2-amd64",
+  "FreeBSD 15.1-RELEASE-p6",
+  "OpenSSL 3.5.9"
+ ],
+ "updates": "Click to check for updates."
+}

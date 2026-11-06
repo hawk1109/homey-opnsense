@@ -1,0 +1,113 @@
+{
+  "pair": {
+    "title": "Connect your OPNsense firewall",
+    "intro": "Create an API key for a dedicated user on the firewall (System → Access → Users → API keys) and enter it below.",
+    "url": "Firewall address",
+    "url_hint": "For example https://192.168.178.1",
+    "key": "API key",
+    "secret": "API secret",
+    "check": "Check certificate",
+    "checking": "Checking…",
+    "cert_title": "Firewall certificate",
+    "cert_untrusted": "This certificate is not signed by a public authority, which is normal for a home firewall. Compare the fingerprint with System → Trust → Certificates on the firewall. Homey will only talk to a firewall presenting exactly this certificate.",
+    "cert_trusted": "This certificate is trusted.",
+    "cert_subject": "Issued to",
+    "cert_issuer": "Issued by",
+    "cert_valid": "Valid until",
+    "cert_fp": "SHA-256 fingerprint",
+    "trust": "Trust this certificate and connect",
+    "connect": "Connect",
+    "connecting": "Connecting…",
+    "connected": "Connected to __hostname__ (OPNsense __version__).",
+    "missing": "Some data will be missing until the API user gets these privileges: __list__",
+    "continue": "Continue",
+    "privileges_hint": "Recommended privileges for the API user: Lobby: Dashboard, System: Gateways, Status: Services, Diagnostics: Netstat.",
+    "error_required": "Please fill in the address, key and secret.",
+    "error_auth": "The firewall rejected the API key or secret.",
+    "error_cert": "Certificate problem: __message__",
+    "error_network": "Cannot reach the firewall: __message__",
+    "error_no_privileges": "The API user has none of the required privileges. Add at least Lobby: Dashboard and System: Gateways.",
+    "not_connected": "Please connect first."
+  },
+  "device": {
+    "no_connection": "No firewall connection configured. Use Repair.",
+    "auth_failed": "The firewall rejected the API key. Use Repair to enter a new key.",
+    "cert_changed": "The firewall certificate has changed. Use Repair to check and trust the new one.",
+    "unknown_service": "Service __id__ not found on the firewall",
+    "restart_forbidden": "The API user may not restart services (needs Status: Services)."
+  },
+  "status": {
+    "healthy": "Healthy"
+  },
+  "problem": {
+    "unreachable": "Firewall unreachable",
+    "wan_down": "Internet down (__name__)",
+    "wan_loss": "Packet loss __value__%",
+    "wan_latency": "High latency __value__ ms",
+    "service": "__name__ stopped",
+    "temperature": "Temperature __value__ °C",
+    "memory": "Memory __value__%",
+    "disk": "Disk __value__% full",
+    "states": "States __value__% of limit",
+    "load": "CPU load __value__",
+    "if_errors": "__value__ interface errors in the last hour"
+  },
+  "event": {
+    "reachable": "Reachable again after __minutes__ min",
+    "rebooted": "Firewall rebooted",
+    "resolved": "Resolved: __problem__ (__minutes__ min)",
+    "restart": "Restart requested: __id__"
+  },
+  "service": {
+    "running": "running",
+    "stopped": "stopped"
+  },
+  "settings": {
+    "none": "None",
+    "ca_verified": "Verified by certificate authority"
+  },
+  "unit": {
+    "d": "d",
+    "h": "h",
+    "m": "m"
+  },
+  "widget": {
+    "healthy": "All systems healthy",
+    "problems": "__n__ problems",
+    "problem": "1 problem",
+    "unreachable": "Firewall unreachable",
+    "unreachable_since": "since __time__",
+    "internet": "Internet",
+    "latency": "Latency",
+    "loss": "Loss",
+    "down": "Download",
+    "up": "Upload",
+    "online": "Online",
+    "offline": "Offline",
+    "not_monitored": "Gateway monitoring is off",
+    "last_24h": "Last 24 hours",
+    "collecting": "collecting since install",
+    "throughput": "Throughput",
+    "latency_chart": "Latency",
+    "cpu": "CPU load",
+    "memory": "Memory",
+    "temperature": "Temperature",
+    "disk": "Disk",
+    "states": "States",
+    "errors": "Errors/h",
+    "services": "Services",
+    "all_running": "All __n__ running",
+    "stopped": "stopped",
+    "ignored": "ignored",
+    "events": "Recent events",
+    "no_events": "Nothing happened yet.",
+    "uptime": "up __uptime__",
+    "empty": "No OPNsense firewall yet. Add one first.",
+    "missing": "Missing privileges: __list__",
+    "now": "now",
+    "ms": "ms",
+    "mbps": "Mbit/s",
+    "n_running": "__n__ running",
+    "less": "Show less"
+  }
+}

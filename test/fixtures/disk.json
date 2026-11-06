@@ -1,0 +1,30 @@
+{
+ "devices": [
+  {
+   "device": "zroot/ROOT/default",
+   "type": "zfs",
+   "blocks": "49.4G",
+   "total": "49.4G",
+   "total_bytes": 52992700416,
+   "used": "1.25G",
+   "used_bytes": 1345912832,
+   "available": "48.1G",
+   "available_bytes": 51646787584,
+   "used_pct": 3,
+   "mountpoint": "/"
+  },
+  {
+   "device": "zroot/var/log",
+   "type": "zfs",
+   "blocks": "48.2G",
+   "total": "48.2G",
+   "total_bytes": 51714265088,
+   "used": "64.4M",
+   "used_bytes": 67477504,
+   "available": "48.1G",
+   "available_bytes": 51646787584,
+   "used_pct": 0,
+   "mountpoint": "/var/log"
+  }
+ ]
+}

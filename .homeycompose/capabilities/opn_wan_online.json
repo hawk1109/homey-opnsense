@@ -1,0 +1,20 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Internet",
+    "nl": "Internet"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/wan.svg",
+  "insights": true,
+  "insightsTitleTrue": {
+    "en": "Internet up",
+    "nl": "Internet in de lucht"
+  },
+  "insightsTitleFalse": {
+    "en": "Internet down",
+    "nl": "Internet weg"
+  }
+}

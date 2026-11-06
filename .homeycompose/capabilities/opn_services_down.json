@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Services stopped",
+    "nl": "Services gestopt"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 0,
+  "insights": true,
+  "icon": "/assets/capabilities/services.svg"
+}

@@ -1,0 +1,113 @@
+{
+  "pair": {
+    "title": "Koppel je OPNsense-firewall",
+    "intro": "Maak op de firewall een API-sleutel aan voor een aparte gebruiker (System → Access → Users → API keys) en vul die hieronder in.",
+    "url": "Adres van de firewall",
+    "url_hint": "Bijvoorbeeld https://192.168.178.1",
+    "key": "API key",
+    "secret": "API secret",
+    "check": "Certificaat controleren",
+    "checking": "Controleren…",
+    "cert_title": "Certificaat van de firewall",
+    "cert_untrusted": "Dit certificaat is niet door een publieke autoriteit ondertekend; dat is normaal voor een thuisfirewall. Vergelijk de vingerafdruk met System → Trust → Certificates op de firewall. Homey praat daarna alleen met een firewall die precies dit certificaat laat zien.",
+    "cert_trusted": "Dit certificaat wordt vertrouwd.",
+    "cert_subject": "Uitgegeven aan",
+    "cert_issuer": "Uitgegeven door",
+    "cert_valid": "Geldig tot",
+    "cert_fp": "SHA-256-vingerafdruk",
+    "trust": "Vertrouw dit certificaat en koppel",
+    "connect": "Koppelen",
+    "connecting": "Koppelen…",
+    "connected": "Gekoppeld met __hostname__ (OPNsense __version__).",
+    "missing": "Sommige gegevens ontbreken totdat de API-gebruiker deze rechten krijgt: __list__",
+    "continue": "Doorgaan",
+    "privileges_hint": "Aanbevolen rechten voor de API-gebruiker: Lobby: Dashboard, System: Gateways, Status: Services, Diagnostics: Netstat.",
+    "error_required": "Vul het adres, de key en het secret in.",
+    "error_auth": "De firewall weigerde de API key of het secret.",
+    "error_cert": "Probleem met het certificaat: __message__",
+    "error_network": "Firewall niet bereikbaar: __message__",
+    "error_no_privileges": "De API-gebruiker heeft geen van de benodigde rechten. Voeg minstens Lobby: Dashboard en System: Gateways toe.",
+    "not_connected": "Koppel eerst de firewall."
+  },
+  "device": {
+    "no_connection": "Geen firewallverbinding ingesteld. Gebruik Repareren.",
+    "auth_failed": "De firewall weigerde de API key. Gebruik Repareren om een nieuwe key in te voeren.",
+    "cert_changed": "Het certificaat van de firewall is veranderd. Gebruik Repareren om het nieuwe te controleren en te vertrouwen.",
+    "unknown_service": "Service __id__ niet gevonden op de firewall",
+    "restart_forbidden": "De API-gebruiker mag geen services herstarten (vereist Status: Services)."
+  },
+  "status": {
+    "healthy": "Gezond"
+  },
+  "problem": {
+    "unreachable": "Firewall onbereikbaar",
+    "wan_down": "Internet weg (__name__)",
+    "wan_loss": "Pakketverlies __value__%",
+    "wan_latency": "Hoge latency __value__ ms",
+    "service": "__name__ gestopt",
+    "temperature": "Temperatuur __value__ °C",
+    "memory": "Geheugen __value__%",
+    "disk": "Schijf __value__% vol",
+    "states": "States __value__% van limiet",
+    "load": "CPU-belasting __value__",
+    "if_errors": "__value__ interfacefouten in het laatste uur"
+  },
+  "event": {
+    "reachable": "Weer bereikbaar na __minutes__ min",
+    "rebooted": "Firewall is herstart",
+    "resolved": "Opgelost: __problem__ (__minutes__ min)",
+    "restart": "Herstart aangevraagd: __id__"
+  },
+  "service": {
+    "running": "draait",
+    "stopped": "gestopt"
+  },
+  "settings": {
+    "none": "Geen",
+    "ca_verified": "Geverifieerd door certificaatautoriteit"
+  },
+  "unit": {
+    "d": "d",
+    "h": "u",
+    "m": "m"
+  },
+  "widget": {
+    "healthy": "Alles gezond",
+    "problems": "__n__ problemen",
+    "problem": "1 probleem",
+    "unreachable": "Firewall onbereikbaar",
+    "unreachable_since": "sinds __time__",
+    "internet": "Internet",
+    "latency": "Latency",
+    "loss": "Verlies",
+    "down": "Download",
+    "up": "Upload",
+    "online": "Online",
+    "offline": "Offline",
+    "not_monitored": "Gatewaymonitoring staat uit",
+    "last_24h": "Laatste 24 uur",
+    "collecting": "verzameld sinds installatie",
+    "throughput": "Doorvoer",
+    "latency_chart": "Latency",
+    "cpu": "CPU-belasting",
+    "memory": "Geheugen",
+    "temperature": "Temperatuur",
+    "disk": "Schijf",
+    "states": "States",
+    "errors": "Fouten/u",
+    "services": "Services",
+    "all_running": "Alle __n__ draaien",
+    "stopped": "gestopt",
+    "ignored": "genegeerd",
+    "events": "Recente gebeurtenissen",
+    "no_events": "Nog niets gebeurd.",
+    "uptime": "in de lucht __uptime__",
+    "empty": "Nog geen OPNsense-firewall. Voeg er eerst een toe.",
+    "missing": "Ontbrekende rechten: __list__",
+    "now": "nu",
+    "ms": "ms",
+    "mbps": "Mbit/s",
+    "n_running": "__n__ draaien",
+    "less": "Minder tonen"
+  }
+}
